@@ -1,0 +1,105 @@
+<mvc:View xmlns:form="sap.ui.layout.form" controllerName="r9masterdetail.controller.Detail"
+    xmlns="sap.m"
+    xmlns:semantic="sap.f.semantic"
+    xmlns:mvc="sap.ui.core.mvc">
+
+    <semantic:SemanticPage id="detailPage" showFooter="true" busy="{detailView>/busy}" busyIndicatorDelay="{detailView>/delay}">
+        <semantic:titleHeading>
+            <Title id="idTitl" text="{Prdid}-{Prdname}" level="H2"/>
+        </semantic:titleHeading>
+        <semantic:headerContent>
+            <ObjectAttribute id="idObjAtt" title="{i18n>priceTitle}"/>
+            <ObjectNumber id="idObjNo" number="{
+                    path: 'Prdprice',
+                    formatter: '.formatter.numberUnit'
+                }" unit="{Currcode}" />
+            <Bar id="idBar">
+                <contentRight>
+                    <Label id="idLblSts"></Label>
+                    <Text id="idTxtxSts" text="{Status}"/>
+                </contentRight>
+            </Bar>
+        </semantic:headerContent>
+        <semantic:content>
+            <IconTabBar id="idIconTabBar">
+                <items>
+                    <IconTabFilter id="idTabFilter2" icon="sap-icon://detail-more">
+                        <form:SimpleForm id="idSF" title="{i18n>detailLineItemSimpleFormHeading}" layout="ResponsiveGridLayout">
+                            <Label id="idLbl1" text="Product ID"/>
+                            <Text id="idtxt1" text="{Prdid}"></Text>
+                            <Label id="idLbl2" text="Product Name"/>
+                            <Text id="idtxt2" text="{Prdname}"></Text>
+                            <Label id="idLbl3" text="Description"/>
+                            <Text id="idtxt3" text="{Prddesc}"></Text>
+                            <Label id="idLbl4" text="Price"/>
+                            <Text id="idtxt4" text="{Prdprice}"></Text>
+                            <Label id="idLbl5" text="Currency"/>
+                            <Text id="idtxt5" text="{Currcode}"></Text>
+                            <Label id="idLbl6" text="Status"/>
+                            <Text id="idtxt6" text="{Status}"></Text>
+                            <Label id="idLbl7" text="Status Code"/>
+                            <Text id="idtxt7" text="{statusCode}"></Text>
+                        </form:SimpleForm>
+                    </IconTabFilter>
+                    <IconTabFilter id="idTabFilter1" icon="sap-icon://supplier">
+                        <Table id="lineItemsList" width="auto" items="{toSuppliers}" updateFinished=".onListUpdateFinished" noDataText="{i18n>detailLineItemTableNoDataText}" busyIndicatorDelay="{detailView>/lineItemTableDelay}">
+                            <headerToolbar>
+                                <Toolbar id="idToolbar">
+                                    <Title id="lineItemsTitle" text="{detailView>/lineItemListTitle}" titleStyle="H3" level="H3"/>
+                                </Toolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column id="idcol1">
+                                    <Text id="idTxt1" text="{i18n>detailLineItemTableIDColumn}"/>
+                                </Column>
+                                <Column id="idcol2">
+                                    <Text id="idTxt2" text="{i18n>detailLineItemTableName}"/>
+                                </Column>
+                                <Column id="idCol3" minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+                                    <Text id="idTxt3" text="{i18n>detailLineItemTableUnitNumberColumn}"/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem id="idColList">
+                                    <cells>
+                                        <ObjectIdentifier id="idObjIden1" title="{Supid}" />
+                                        <ObjectIdentifier id="idObjIden2" text="{Supname}"></ObjectIdentifier>
+                                        <ObjectIdentifier id="idObjIden3" text="{Suploc}" />
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                    </IconTabFilter>
+                    <IconTabFilter id="idTabFilter" icon="sap-icon://attachment">
+                        <Carousel id="idCarsousel" pages="{toAttachments}">
+                            <Image id="idImage" src="/sap/opu/odata/sap/ZSHREE_PRODUCTS_SRV/attchmentsSet(Prdid='{Prdid}',Filename='{Filename}')/$value"></Image>
+                        </Carousel>
+                    </IconTabFilter>
+                </items>
+            </IconTabBar>
+        </semantic:content>
+        <!--Semantic ShareMenu Buttons-->
+        <semantic:sendEmailAction>
+            <semantic:SendEmailAction id="shareEmail" press=".onSendEmailPress"/>
+        </semantic:sendEmailAction>
+
+        <semantic:closeAction>
+            <semantic:CloseAction id="closeColumn" press=".onCloseDetailPress"/>
+        </semantic:closeAction>
+
+        <semantic:fullScreenAction>
+            <semantic:FullScreenAction id="enterFullScreen" visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen"/>
+        </semantic:fullScreenAction>
+        <semantic:exitFullScreenAction>
+            <semantic:ExitFullScreenAction id="exitFullScreen" visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}" press=".toggleFullScreen"/>
+        </semantic:exitFullScreenAction>
+        <semantic:positiveAction>
+            <semantic:PositiveAction id="idApp" text="Approve" press="onApproveOrReject"></semantic:PositiveAction>
+        </semantic:positiveAction>
+        <semantic:negativeAction>
+            <semantic:NegativeAction id="idRej" text="Reject" press="onApproveOrReject"></semantic:NegativeAction>
+        </semantic:negativeAction>
+
+    </semantic:SemanticPage>
+
+</mvc:View>
